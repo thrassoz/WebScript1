@@ -1,5 +1,6 @@
 from selenium import webdriver
 import time
+import json
 
 def products_by_category():
     print("Insert a name to search for: ")
@@ -34,7 +35,7 @@ def products_by_category():
         products = browser.find_elements_by_class_name('product-description')
         for i in range(len(products)):
             description = products[i].text.rsplit('\n')
-            d[f'{description[3]}'] = f'{description[4]}' #change the format of the dict
+            d[f'{description[3]}'] = [f'{description[4]}', f'{description[1]}'] #change the format of the dict
 
         try:
             next_page = browser.find_element_by_id('infinity-url')
@@ -47,10 +48,5 @@ def products_by_category():
 
 catalogue = products_by_category()
 
-print(catalogue)
-
-
-
-
-
-
+with open('search_results.json', 'w', encoding='utf-8') as fp:
+    json.dump(catalogue, fp, indent=4, separators=(", ", ": "), ensure_ascii=False)
